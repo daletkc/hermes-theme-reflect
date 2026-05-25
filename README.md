@@ -103,4 +103,4 @@ MIT — use freely, modify, share. Attribution appreciated but not required.
 
 ## Credits
 
-Theme by Dale Thomas / ActionableOps. Inspired by the workspace dashboard at makeflow.dev.
+Theme by Dale Thomas / ActionableOps.
