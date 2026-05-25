@@ -2,34 +2,6 @@
 
 A premium dark theme for the [Hermes Agent](https://github.com/NousResearch/hermes-agent) web dashboard. Deep navy surfaces with indigo-violet accents, aurora bloom behind hero content, and subtle film grain for depth.
 
-## Preview
-
-### Sessions
-![Sessions page with Reflect theme](screenshots/screenshot-01-sessions.png)
-
-### Analytics
-![Analytics page with Reflect theme](screenshots/screenshot-03-analytics.png)
-
-### Cron
-![Cron page with Reflect theme](screenshots/screenshot-04-cron.png)
-
-### Kanban
-![Kanban board with Reflect theme](screenshots/screenshot-05-kanban.png)
-
-### Config
-![Config page with Reflect theme](screenshots/screenshot-06-config.png)
-
-### Skills
-![Skills page with Reflect theme](screenshots/screenshot-07-skills.png)
-
-### Logs
-![Logs page with Reflect theme](screenshots/screenshot-08-logs.png)
-
-### Style Guide
-![Style Guide with every component themed](screenshots/screenshot-09-style-guide.png)
-
-See the full interactive style guide at `<your-dashboard-url>/style-guide` after installing.
-
 ## Install
 
 1. Download `reflect.yaml` into your dashboard themes directory:
