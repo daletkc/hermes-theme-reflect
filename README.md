@@ -20,7 +20,7 @@ A premium dark theme for the [Hermes Agent](https://github.com/NousResearch/herm
 
 ```bash
 mkdir -p ~/.hermes/dashboard-themes
-curl -o ~/.hermes/dashboard-themes/reflect.yaml https://raw.githubusercontent.com/YOUR-USERNAME/hermes-theme-reflect/main/reflect.yaml
+curl -o ~/.hermes/dashboard-themes/reflect.yaml https://raw.githubusercontent.com/daletkc/hermes-theme-reflect/main/reflect.yaml
 ```
 
 2. Select the theme in your dashboard — it appears as **"Reflect"** in the theme switcher immediately. No restart needed.
