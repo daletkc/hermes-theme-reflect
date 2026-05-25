@@ -2,7 +2,6 @@
 
 A premium dark theme for the [Hermes Agent](https://github.com/NousResearch/hermes-agent) web dashboard. Deep navy surfaces with indigo-violet accents, aurora bloom behind hero content, and subtle film grain for depth.
 
-**Reflect** is the theme that powers the workspace dashboard at [work.makeflow.dev](https://work.makeflow.dev) — now available for any Hermes installation.
 
 ## Preview
 
