@@ -21,7 +21,7 @@ typography:
   fontDisplay: '"Inter", system-ui, -apple-system, sans-serif'
   fontUrl: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
   baseSize: "15px"
-  lineHeight: "1.6"
+  lineHeight: "1.5"
   letterSpacing: "-0.005em"
 
 layout:
@@ -102,7 +102,7 @@ customCSS: |
     --text-2xl: 1.75rem;
     --text-3xl: 2.5rem;
     --metric: 2rem;
-    --leading: 1.6;
+    --leading: 1.5;
     --tracking-tight: -0.02em;
     --tracking-body: -0.005em;
     --tracking-caps: 0.08em;
@@ -310,6 +310,72 @@ customCSS: |
   .hermes-kanban .hermes-kanban-priority {
     color: var(--color-muted-foreground) !important;
   }
+  
+  /* ---- Kanban Drawer Redesign ---- */
+  /* Drawer title - large, bold */
+  .hermes-kanban-drawer-title {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-2xl) !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    letter-spacing: var(--tracking-body) !important;
+    color: var(--color-foreground) !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Drawer section headers - clear, sentence case */
+  .hermes-kanban-drawer-section-header {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-base) !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    letter-spacing: var(--tracking-body) !important;
+    color: var(--color-foreground) !important;
+    text-transform: none !important;
+    margin: 1.25rem 0 0.75rem 0 !important;
+  }
+  
+  /* Drawer metadata - muted, grid layout */
+  .hermes-kanban-drawer-meta {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 0.75rem !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.5 !important;
+  }
+  
+  .hermes-kanban-drawer-meta > .hermes-kanban-meta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+  }
+  
+  .hermes-kanban-drawer-meta-label {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-xs) !important;
+    font-weight: 500 !important;
+    color: var(--color-muted-foreground) !important;
+    text-transform: uppercase !important;
+    letter-spacing: var(--tracking-caps) !important;
+  }
+  
+  .hermes-kanban-drawer-meta-value {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-sm) !important;
+    font-weight: 400 !important;
+    color: var(--color-foreground) !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Drawer body - 1.5 line-height */
+  .hermes-kanban-drawer-body {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-sm) !important;
+    line-height: 1.5 !important;
+    letter-spacing: var(--tracking-body) !important;
+    padding: 0.75rem !important;
+  }
+  
   /* ---- Kanban action buttons: solid primary with clean alignment ---- */
   .hermes-kanban button:not(.hermes-kanban-column-add):not([type="checkbox"]):not(.lucide):not(.peer):not([role="combobox"]),
   .hermes-kanban-boardswitcher-inner button {
