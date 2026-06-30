@@ -457,14 +457,87 @@ customCSS: |
     font-family: var(--theme-font-sans) !important;
   }
 
-  /* ---- Drawer body: wider padding now that we have room ---- */
+  /* ---- Drawer body: centered reading column (multica clean layout) ---- */
+  /* A wide drawer with full-bleed content feels cavernous. multica centers
+     content in a max-w column (max-w-4xl mx-auto) with generous padding.
+     We cap content at 860px and center it so the wide panel reads clean. */
   .hermes-kanban-drawer-body {
     font-family: var(--theme-font-sans) !important;
     font-size: var(--text-sm) !important;
     line-height: 1.5 !important;
     letter-spacing: var(--tracking-body) !important;
-    padding: 1.25rem 1.5rem !important;
-    gap: 1rem !important;
+    padding: 1.75rem 2rem 2.5rem !important;
+    gap: 1.5rem !important;
+    align-items: center !important;
+  }
+  .hermes-kanban-drawer-body > * {
+    width: 100% !important;
+    max-width: 860px !important;
+  }
+
+  /* ---- Sections: quiet separation, generous rhythm (multica space-y-5) ---- */
+  .hermes-kanban-section {
+    gap: 0.6rem !important;
+    padding-top: 1.4rem !important;
+    border-top: 1px solid color-mix(in srgb, var(--border-soft, #1F2D45) 70%, transparent) !important;
+  }
+  /* No divider above the very first section (sits right under metadata) */
+  .hermes-kanban-section:first-of-type {
+    border-top: none !important;
+    padding-top: 0.25rem !important;
+  }
+
+  /* Section headers: quiet label, no caps tracking (multica text-xs medium) */
+  .hermes-kanban-section-head {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-xs) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--color-muted-foreground) !important;
+    margin: 0 !important;
+  }
+
+  /* Collapse toggle: ghost button, not a bordered box */
+  .hermes-kanban-section-toggle {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-muted-foreground) !important;
+    border-radius: var(--r-sm, 0.375rem) !important;
+    padding: 0.15rem 0.4rem !important;
+    transition: background-color 120ms var(--ease) !important;
+  }
+  .hermes-kanban-section-toggle:hover {
+    background: color-mix(in srgb, var(--color-foreground) 8%, transparent) !important;
+    color: var(--color-foreground) !important;
+  }
+
+  /* ---- Events: clean aligned activity rows (multica) ---- */
+  .hermes-kanban-event {
+    font-family: var(--theme-font-sans) !important;
+    font-size: var(--text-xs) !important;
+    align-items: center !important;
+    min-height: 26px !important;
+    margin: 0 -0.5rem !important;
+    padding: 0 0.5rem !important;
+    border-radius: var(--r-sm, 0.375rem) !important;
+    transition: background-color 120ms var(--ease) !important;
+  }
+  .hermes-kanban-event:hover {
+    background: color-mix(in srgb, var(--color-foreground) 5%, transparent) !important;
+  }
+  .hermes-kanban-event-kind {
+    color: var(--color-foreground) !important;
+    font-weight: 500 !important;
+  }
+  .hermes-kanban-event-ago,
+  .hermes-kanban-ago {
+    color: var(--color-muted-foreground) !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+  .hermes-kanban-event-payload {
+    max-width: 420px !important;
+    color: var(--color-muted-foreground) !important;
   }
 
   /* ---- Drawer log pane: taller + ring-framed (multica ring, not border) ---- */
