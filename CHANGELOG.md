@@ -4,6 +4,17 @@ All notable changes to the **Reflect** theme are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). The full
 commit-level history lives in git; this file is the human-readable summary.
 
+## 2026-06-30 — Card contrast: task id + green progress pill
+
+### Fixed
+- **Task id on cards** (e.g. `t_bb27da70`) was `0.65rem` muted-grey and
+  hard to read — brightened to a mid-tone (55% foreground / 45% muted),
+  enlarged to `0.72rem`, weight 500.
+- **Green "n/n" complete pill** rendered grey text on a solid bright-green
+  background (unreadable). Now dark-green text (`#052e16`) on the green,
+  bold and slightly larger — high contrast.
+- Comment markdown no longer inherits the description box's border.
+
 ## 2026-06-30 — Fix: define `--color-foreground` (made the drawer boxes render)
 
 ### Fixed
