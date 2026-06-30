@@ -1,0 +1,5 @@
+# Local editor/linter backups of reflect.yaml
+*.bak
+*.bak.*
+*.unminified
+*.unminified.*
