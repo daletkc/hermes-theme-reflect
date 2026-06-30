@@ -327,10 +327,12 @@ customCSS: |
     font-feature-settings: "tnum" !important;
   }
 
-  /* ---- Kanban: worker log uses Inter to match the rest of the drawer ---- */
-  .hermes-kanban .hermes-kanban-log,
-  .hermes-kanban pre.hermes-kanban-log,
-  .hermes-kanban .hermes-kanban-pre.hermes-kanban-log {
+  /* ---- Kanban: worker log uses the page sans font ---- */
+  /* UNSCOPED: the drawer is portaled to document.body (outside .hermes-kanban),
+     so a .hermes-kanban-prefixed selector never matched it. */
+  .hermes-kanban-log,
+  pre.hermes-kanban-log,
+  .hermes-kanban-pre.hermes-kanban-log {
     font-family: var(--theme-font-sans) !important;
     font-size: 0.78rem !important;
     font-feature-settings: "tnum" !important;
@@ -363,16 +365,16 @@ customCSS: |
   /* ---- Drawer metadata: multica PropRow (label-left / value-right) ---- */
   /* Quiet rows, not stacked cards. Each row is a 2-col grid with a full-row
      hover wash that bleeds to the panel edge (multica's -mx-2 px-2 idiom). */
-  /* Light panel surface so the metadata block reads as its own card */
+  /* Lifted lighter card — same surface treatment as the worker-log box */
   .hermes-kanban-drawer-meta {
     display: flex !important;
     flex-direction: column !important;
     gap: 2px !important;
     margin: 0.25rem 0 !important;
-    background: color-mix(in srgb, var(--color-foreground) 5%, transparent) !important;
+    background: color-mix(in srgb, var(--color-foreground) 6%, transparent) !important;
     border-radius: var(--r-lg, 0.75rem) !important;
-    padding: 0.5rem 0.75rem !important;
-    box-shadow: var(--highlight) !important;
+    padding: 0.6rem 0.85rem !important;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 8%, transparent), var(--highlight) !important;
   }
 
   .hermes-kanban-drawer-meta > .hermes-kanban-meta-row {
@@ -545,14 +547,14 @@ customCSS: |
     color: var(--color-muted-foreground) !important;
   }
 
-  /* ---- Drawer log pane: taller + ring-framed (multica ring, not border) ---- */
+  /* ---- Drawer log pane: lifted lighter card (matches metadata panel) ---- */
   .hermes-kanban-log {
     max-height: 520px !important;
-    background: color-mix(in srgb, var(--color-background, #0A0E1A) 70%, transparent) !important;
+    background: color-mix(in srgb, var(--color-foreground) 6%, transparent) !important;
     border: none !important;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 10%, transparent) !important;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 8%, transparent), var(--highlight) !important;
     border-radius: var(--r-lg, 0.75rem) !important;
-    padding: 0.75rem 1rem !important;
+    padding: 0.85rem 1.1rem !important;
   }
 
   /* ---- Comment input: Inter + soft ring (was mono, sharp corners) ---- */
