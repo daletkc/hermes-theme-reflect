@@ -327,11 +327,11 @@ customCSS: |
     font-feature-settings: "tnum" !important;
   }
 
-  /* ---- Kanban: worker log keeps Geist Mono (it IS a terminal log) ---- */
+  /* ---- Kanban: worker log uses Inter to match the rest of the drawer ---- */
   .hermes-kanban .hermes-kanban-log,
   .hermes-kanban pre.hermes-kanban-log,
   .hermes-kanban .hermes-kanban-pre.hermes-kanban-log {
-    font-family: var(--theme-font-mono) !important;
+    font-family: var(--theme-font-sans) !important;
     font-size: 0.78rem !important;
     font-feature-settings: "tnum" !important;
   }
