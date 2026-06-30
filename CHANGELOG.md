@@ -12,6 +12,11 @@ commit-level history lives in git; this file is the human-readable summary.
   fallback chain (`ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`).
   multica's third font (Source Serif 4) is onboarding/landing-only and is
   not used anywhere in the dashboard UI, so it is intentionally not loaded.
+- **Base font size 15px → 16px** to match multica's root size, so equivalent
+  text renders at the same size.
+- **Description box** now gets the same lifted lighter card surface (rounded,
+  ringed, slightly lighter fill) as the metadata box; comment markdown is
+  left plain so it isn't double-boxed.
 - **Kanban board columns wrap** into a responsive grid
   (`repeat(auto-fill, minmax(280px, 1fr))`) instead of scrolling
   horizontally — Done/Archived columns wrap into view.
