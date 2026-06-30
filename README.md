@@ -41,7 +41,7 @@ hermes config set dashboard.theme default
 | Accent | `#8b5cf6` | Violet — highlights, hover states |
 | Foreground | `#E6EAF2` | Primary text |
 | Muted | `#8B95A8` | Secondary text |
-| Font | Geist + Geist Mono | Body + monospace |
+| Font | Inter + Geist Mono | Body + monospace |
 
 ### Signature effects
 
@@ -61,7 +61,7 @@ The theme includes comprehensive overrides for the Hermes Kanban plugin:
 
 ## Font Loading
 
-The theme loads **Geist** (weights 300–700) and **Geist Mono** (weights 400–600) from Google Fonts via the `fontUrl` field. If you're running the dashboard behind a firewall without outbound internet:
+The theme loads **Inter** (weights 300–700) and **Geist Mono** (weights 400–600) from Google Fonts via the `fontUrl` field. If you're running the dashboard behind a firewall without outbound internet:
 
 1. Host the fonts locally on your reverse proxy
 2. Update `fontUrl` in the YAML to point to your local font CSS

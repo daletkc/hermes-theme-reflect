@@ -14,10 +14,10 @@ palette:
   warmGlow: rgba(99, 102, 241, 0.16)
   noiseOpacity: 0
 typography:
-  fontSans: '"Geist", "Inter", system-ui, -apple-system, sans-serif'
-  fontMono: '"Geist Mono", "JetBrains Mono", ui-monospace, monospace'
-  fontDisplay: '"Geist", "Inter", system-ui, -apple-system, sans-serif'
-  fontUrl: https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap
+  fontSans: '"Inter", system-ui, -apple-system, sans-serif'
+  fontMono: '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
+  fontDisplay: '"Inter", system-ui, -apple-system, sans-serif'
+  fontUrl: https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap
   baseSize: 15px
   lineHeight: '1.5'
   letterSpacing: -0.005em

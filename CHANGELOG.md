@@ -4,6 +4,18 @@ All notable changes to the **Reflect** theme are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). The full
 commit-level history lives in git; this file is the human-readable summary.
 
+## 2026-06-30 — Fonts matched to multica + Kanban board wrapping
+
+### Changed
+- **Fonts now match multica exactly**: body/UI font is **Inter** (reverting
+  the brief switch to Geist), monospace is **Geist Mono** with multica's
+  fallback chain (`ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`).
+  multica's third font (Source Serif 4) is onboarding/landing-only and is
+  not used anywhere in the dashboard UI, so it is intentionally not loaded.
+- **Kanban board columns wrap** into a responsive grid
+  (`repeat(auto-fill, minmax(280px, 1fr))`) instead of scrolling
+  horizontally — Done/Archived columns wrap into view.
+
 ## 2026-06-30 — Kanban task drawer redesign (multica-inspired)
 
 A pass to bring the Kanban task detail drawer in line with a clean,
