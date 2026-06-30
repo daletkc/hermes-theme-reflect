@@ -4,6 +4,23 @@ All notable changes to the **Reflect** theme are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). The full
 commit-level history lives in git; this file is the human-readable summary.
 
+## 2026-06-30 — Fix: define `--color-foreground` (made the drawer boxes render)
+
+### Fixed
+- **The drawer boxes, borders, and brightened section headers were not
+  rendering** because every one of those rules uses
+  `color-mix(… var(--color-foreground) …)`, and `--color-foreground` was
+  never actually defined: the dashboard's theme system has no `foreground`
+  override key, and this theme sets `palette.foreground.alpha: 0`. A
+  `color-mix` with an undefined variable is invalid CSS, so the browser
+  silently dropped those declarations (boxes came out with `border: 0 none`
+  and transparent backgrounds).
+- Define `--color-foreground: #E6EAF2` and `--color-background: #0A0E1A`
+  directly in the customCSS `:root`. Nothing else sets them, so these win;
+  if a dashboard *does* define them (inline), that takes precedence — the
+  override is purely a gap-filler and cannot break other setups. The
+  backdrop layer (`palette.foreground`) is untouched.
+
 ## 2026-06-30 — Drawer boxes, opaque panel, brighter section headers
 
 ### Fixed
