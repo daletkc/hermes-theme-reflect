@@ -53,11 +53,24 @@ hermes config set dashboard.theme default
 
 ### Kanban styling
 
-The theme includes comprehensive overrides for the Hermes Kanban plugin:
+The theme includes comprehensive overrides for the Hermes Kanban plugin, with a
+**multica / Linear-inspired** task drawer:
+
+**Board**
 - Cards with accent borders on hover, rounded corners, elevation shadows
 - Outlined dropdown/select triggers (not solid primary)
 - Primary buttons for actions, with accent hover
-- Responsive column layout on mobile (<768px)
+- **Status columns wrap into a responsive grid** (`auto-fill, minmax(280px, 1fr)`)
+  instead of scrolling horizontally — every column stays in view
+- Responsive single-column layout on mobile (<768px)
+
+**Task detail drawer**
+- Wide panel (up to `min(1320px, 94vw)`) with content held in a centered reading column
+- Solid opaque panel over a light, blurred scrim — details sit sharply in front of the board
+- Metadata, description, and worker-log render as **lifted lighter cards** with a real 1px border
+- Quiet, label-left/value-right metadata rows with full-row hover
+- Section headers in a legible mid-tone; values/content in white (multica hierarchy)
+- Title Case action buttons; pill-shaped dependency chips
 
 ## Font Loading
 

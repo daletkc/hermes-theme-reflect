@@ -4,6 +4,21 @@ All notable changes to the **Reflect** theme are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). The full
 commit-level history lives in git; this file is the human-readable summary.
 
+## 2026-06-30 — Drawer boxes, opaque panel, brighter section headers
+
+### Fixed
+- **Detail boxes now use a real 1px border** (metadata, description, worker
+  log) instead of an inset box-shadow ring that could silently fail to
+  render, leaving no visible edge.
+- **Drawer panel + header forced solid opaque** (blur removed from the
+  header) so the issue details sit sharply in front of the blurred board
+  rather than looking hazy.
+
+### Changed
+- **Section headers brightened** to a legible mid-tone (70% foreground /
+  30% muted) — readable but still secondary to the white title/content, so
+  the multica hierarchy stays intact.
+
 ## 2026-06-30 — Fonts matched to multica + Kanban board wrapping
 
 ### Changed
