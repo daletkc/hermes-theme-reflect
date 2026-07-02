@@ -1,0 +1,238 @@
+/* ============================================================================
+ * Reflect — global (non-kanban) customCSS rules
+ * Transcribed 1:1 from the previous single-line customCSS blob, reformatted.
+ * Only intentional change: the generic bg-card hover-lift rule now excludes
+ * kanban internals (see comment there).
+ * ========================================================================== */
+
+:root {
+  --color-foreground: #E6EAF2;
+  --color-background: #0A0E1A;
+  --theme-accent: #6366f1;
+  --surface-1: #11182A;
+  --surface-2: #151D32;
+  --surface-3: #1B2740;
+  --input: #0F1728;
+  --fg: #E6EAF2;
+  --fg-muted: #8B95A8;
+  --fg-subtle: #6B7A8E;
+  --border-soft: #1F2D45;
+  --primary-hi: #7C7FF7;
+  --accent-hi: #9D75F8;
+  --primary-wash: rgba(99,102,241,0.14);
+  --accent-wash: rgba(139,92,246,0.14);
+  --success-wash: rgba(34,197,94,0.16);
+  --warning-wash: rgba(245,158,11,0.16);
+  --danger-wash: rgba(239,68,68,0.16);
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.5rem;
+  --metric: 2rem;
+  --leading: 1.5;
+  --tracking-tight: -0.02em;
+  --tracking-body: -0.005em;
+  --tracking-caps: 0.08em;
+  --r-sm: 0.375rem;
+  --r: 0.5rem;
+  --r-lg: 0.75rem;
+  --r-xl: 1rem;
+  --r-full: 999px;
+  --shadow-rest: 0 1px 2px rgba(0,0,0,0.45);
+  --shadow-raised: 0 4px 8px -2px rgba(0,0,0,0.5), 0 2px 4px -2px rgba(0,0,0,0.4);
+  --shadow-overlay: 0 16px 32px -8px rgba(0,0,0,0.6), 0 6px 12px -6px rgba(0,0,0,0.5);
+  --shadow-lift: 0 20px 40px -12px rgba(0,0,0,0.65), 0 8px 16px -8px rgba(0,0,0,0.5);
+  --highlight: inset 0 1px 0 rgba(255,255,255,0.05);
+  --highlight-hi: inset 0 1px 0 rgba(255,255,255,0.10);
+  --glow-primary: 0 0 0 1px rgba(99,102,241,0.5), 0 10px 30px -10px rgba(99,102,241,0.45);
+  --ease: cubic-bezier(0.16,1,0.3,1);
+  --fast: 130ms;
+  --med: 220ms;
+  --slow: 380ms;
+  --font-mondwest: var(--theme-font-sans) !important;
+  --font-sans: var(--theme-font-sans) !important;
+  --font-mono: var(--theme-font-mono) !important;
+  --font-rules-compressed: var(--theme-font-sans) !important;
+}
+
+/* aurora bloom */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10% -10% auto -10%;
+  height: 80vh;
+  z-index: -2;
+  background: radial-gradient(46rem 32rem at 16% -4%, oklch(0.62 0.22 277 / 0.34), transparent 60%),
+              radial-gradient(40rem 30rem at 52% -10%, oklch(0.60 0.25 330 / 0.26), transparent 60%),
+              radial-gradient(38rem 30rem at 84% -2%, oklch(0.72 0.15 205 / 0.22), transparent 62%),
+              radial-gradient(30rem 24rem at 100% 14%, oklch(0.64 0.22 300 / 0.18), transparent 60%);
+  filter: saturate(1.15);
+  animation: auroraDrift 24s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes auroraDrift {
+  0% { transform: translate3d(0,0,0) scale(1); }
+  100% { transform: translate3d(-2.5%,2%,0) scale(1.07); }
+}
+
+/* film grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection { background: rgba(99,102,241,0.38); color: #E6EAF2; }
+*:focus-visible { outline: 2px solid var(--color-primary, #6366f1); outline-offset: 2px; border-radius: var(--r-sm, 0.375rem); }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(36,48,74,0.7); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59,82,130,0.9); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body { font-feature-settings: "cv11", "ss01"; }
+.font-mono, code, pre, [class*="font-mono"] { font-family: var(--theme-font-mono) !important; font-feature-settings: "tnum"; }
+.font-mondwest, .font-courier { font-family: var(--theme-font-sans) !important; }
+.font-mondwest.uppercase, a.font-mondwest[class*="tracking-"], nav .font-mondwest {
+  text-transform: none !important;
+  letter-spacing: var(--tracking-body, -0.005em) !important;
+  font-weight: 500 !important;
+}
+.font-mondwest[class*="tracking-"][class*="border-r"], [class*="font-mondwest"][class*="tracking-"][class*="border-r"] {
+  letter-spacing: 0 !important;
+  border-radius: var(--r, 0.5rem) !important;
+}
+button[class*="tracking-"][class*="focus-visible:ring-midground/30"] {
+  letter-spacing: 0 !important;
+  border-radius: var(--r-sm, 0.375rem) !important;
+}
+button:not(.lucide):not([type="checkbox"]):not(.lucide-root), a[class*="cursor-pointer"], [role="radio"], [role="tab"] { border-radius: var(--r-sm, 0.375rem); }
+button[class*="font-mono"][class*="grid-cols"] { border-radius: var(--r-sm, 0.375rem) !important; letter-spacing: 0 !important; }
+
+button[role="combobox"], [role="listbox"] button, [data-radix-collection-item][role="option"] {
+  background: color-mix(in srgb, var(--color-card, #11182A) 60%, transparent) !important;
+  color: var(--color-muted-foreground) !important;
+  border: 1px solid color-mix(in srgb, var(--color-border, #24304A) 50%, transparent) !important;
+  border-radius: var(--radius, 0.5rem) !important;
+  font-weight: 450 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+button[role="combobox"]:hover {
+  border-color: color-mix(in srgb, var(--color-border, #24304A) 80%, transparent) !important;
+  background: color-mix(in srgb, var(--color-card, #11182A) 75%, transparent) !important;
+}
+button[role="combobox"]:focus {
+  border-color: var(--color-primary, #6366f1) !important;
+  box-shadow: 0 0 0 1px var(--color-primary, #6366f1) !important;
+}
+
+/* semantic color utilities */
+.text-primary { color: #6366f1 !important; }
+.bg-primary, [class*="bg-primary/"] { color: #FFFFFF !important; background-color: #6366f1 !important; }
+.text-success, [class*="text-success"], .bg-success, .text-emerald-400, .text-emerald-500 { color: #22c55e !important; }
+.text-warning, [class*="text-warning"], .bg-warning, .text-amber-400, .text-amber-500 { color: #f59e0b !important; }
+.text-destructive, [class*="text-destructive"], .bg-destructive, .text-red-400, .text-red-500 { color: #EF4444 !important; }
+.text-accent, [class*="text-accent"], .text-purple-400, .text-purple-500 { color: #8b5cf6 !important; }
+[data-active="true"] *, .active *, [aria-current="page"] * { color: #E6EAF2 !important; }
+.btn-primary, .bg-primary { color: #FFFFFF !important; }
+.btn-destructive { color: #FFFFFF !important; }
+.text-background-base, [class*="text-background-base"] { color: var(--color-background-base, #0A0E1A) !important; }
+
+/* radius normalization */
+[class*="rounded-2xl"]:not(.hermes-kanban-card):not(.hermes-kanban-column),
+[class*="rounded-xl"]:not(.hermes-kanban-card):not(.hermes-kanban-column) { border-radius: var(--radius, 0.5rem) !important; }
+
+button[class*="font-mono"][class*="bg-transparent"][class*="shadow-midground"],
+[class*="shadow-[inset_-1px_-1px_0_0_#00000080"] {
+  background: var(--color-primary, #6366f1) !important;
+  color: #FFFFFF !important;
+  border-radius: var(--radius, 0.5rem) !important;
+  font-family: var(--theme-font-sans) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  text-transform: none !important;
+}
+button[class*="tracking-[0.15em]"][class*="uppercase"] { letter-spacing: 0 !important; text-transform: none !important; }
+button:not(.hermes-kanban-column-add):not([type="checkbox"]):not(.lucide) {
+  font-family: var(--theme-font-sans) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+.bg-card\/60, [class*="bg-card/60"] { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+[class*="border-border/"] { border-color: color-mix(in srgb, var(--color-border) var(--tw-border-opacity, 50%), transparent); }
+
+/* generic card elevation. Kanban surfaces (cards, columns, and everything
+ * inside the plugin, including the drawer) manage their own elevation, so
+ * they are excluded here — previously the kanban card's INNER Card wrapper
+ * matched this rule and picked up a second hover lift. */
+[class*="bg-card"]:not(.hermes-kanban-card):not(.hermes-kanban-column):not(.hermes-kanban *) {
+  border-radius: var(--radius, 0.5rem) !important;
+  box-shadow: var(--shadow-rest), var(--highlight) !important;
+  transition: transform var(--med) var(--ease), box-shadow var(--med) var(--ease) !important;
+}
+[class*="bg-card"]:not(.hermes-kanban-card):not(.hermes-kanban-column):not(.hermes-kanban *):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-raised), var(--highlight-hi) !important;
+}
+[class*="rounded-full"][class*="text-"][class*="bg-"]:not(.hermes-kanban-column-count) { font-weight: 500; letter-spacing: 0; }
+
+/* progress bars */
+[class*="bg-primary"][class*="h-"][role="progressbar"] > [class*="bg-primary"],
+.progress-fill,
+[class*="bg-primary"][style*="width"] {
+  background: linear-gradient(90deg, var(--color-primary, #6366f1), var(--color-accent, #8b5cf6)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--theme-font-sans) !important;
+  letter-spacing: -0.005em !important;
+  text-transform: none !important;
+}
+.font-mondwest, [class*="font-mondwest"], .font-expanded, [class*="font-expanded"] {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  font-family: var(--theme-font-sans) !important;
+}
+
+/* tabs / radios / switches */
+[role="radio"][aria-checked="true"], [role="radio"][data-state="active"],
+[role="tab"][aria-selected="true"], [role="tab"][data-state="active"] {
+  background: color-mix(in srgb, var(--color-primary, #6366f1) 15%, transparent) !important;
+  color: var(--color-primary, #6366f1) !important;
+  border-radius: var(--r-sm, 0.375rem) !important;
+}
+[role="radio"]:not([aria-checked="true"]):not([data-state="active"]),
+[role="tab"]:not([aria-selected="true"]):not([data-state="active"]) { color: var(--color-muted-foreground) !important; }
+[role="switch"][aria-checked="true"], [role="switch"][data-state="checked"] { background-color: var(--color-primary, #6366f1) !important; }
+[role="switch"]:not([aria-checked="true"]):not([data-state="checked"]) {
+  background-color: var(--color-input, #0F1728) !important;
+  border: 1px solid var(--color-border, #24304A) !important;
+}
+
+input[type="search"], input[placeholder="Search..."], input[placeholder="Search…"], input[placeholder="Filter cards…"] { border-radius: var(--radius, 0.5rem) !important; }
+button[class*="rounded-full"], button[class*="text-xs"][class*="border"][class*="rounded"] { border-radius: var(--r-sm, 0.375rem) !important; letter-spacing: 0 !important; }
+button[class*="bg-foreground"], button[class*="bg-secondary"] {
+  background: color-mix(in srgb, var(--color-primary, #6366f1) 15%, transparent) !important;
+  color: var(--color-primary, #6366f1) !important;
+  border-radius: var(--r-sm, 0.375rem) !important;
+}

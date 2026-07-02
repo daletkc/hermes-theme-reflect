@@ -54,23 +54,40 @@ hermes config set dashboard.theme default
 ### Kanban styling
 
 The theme includes comprehensive overrides for the Hermes Kanban plugin, with a
-**multica / Linear-inspired** task drawer:
+task drawer modeled directly on **multica's issue detail view**
+(`packages/views/issues`), mapped onto the Reflect palette.
 
 **Board**
-- Cards with accent borders on hover, rounded corners, elevation shadows
-- Outlined dropdown/select triggers (not solid primary)
-- Primary buttons for actions, with accent hover
 - **Status columns wrap into a responsive grid** (`auto-fill, minmax(280px, 1fr)`)
   instead of scrolling horizontally — every column stays in view
-- Responsive single-column layout on mobile (<768px)
+- Cards: single border + shadow hover response (no lift; cards are drag handles),
+  task id anchored left with state chips docked right, bulk-select checkbox
+  revealed on hover/selection, warning badges as amber/red severity chips
+- Selected cards: one primary border + wash (no doubled inset rings)
+- Outlined dropdown/select triggers; responsive single-column layout on mobile
 
-**Task detail drawer**
-- Wide panel (up to `min(1320px, 94vw)`) with content held in a centered reading column
-- Solid opaque panel over a light, blurred scrim — details sit sharply in front of the board
-- Metadata, description, and worker-log render as **lifted lighter cards** with a real 1px border
-- Quiet, label-left/value-right metadata rows with full-row hover
-- Section headers in a legible mid-tone; values/content in white (multica hierarchy)
-- Title Case action buttons; pill-shaped dependency chips
+**Task detail drawer (multica two-pane)**
+- Wide panel (up to `min(1320px, 94vw)`) split into a **document column
+  (max 56rem) + 300px properties rail** behind a full-height hairline; the rail
+  collapses back into the flow below 1100px
+- **Status-aware accent** read from the title dot via `:has()`: a 2px keyline
+  across the panel top, a status chip in the rail (amber running, red blocked),
+  and a pulsing chip dot while the task runs
+- **Unboxed description** in multica's compact prose tier (14px / 1.625,
+  72ch measure) — the task reads as a document, not a stack of boxes
+- Aurora echo behind the title that scrolls away with the content
+- Attachments and events as **bordered record lists** with hairline dividers
+  and full-row hovers; comments with generated avatar discs; worker log as a
+  borderless muted mono block
+- Action row with one primary action, tonal secondaries; Title Case labels;
+  borderless pill dependency chips
+
+The `customCSS` block in `reflect.yaml` is assembled from two readable
+fragments in [mockups/](mockups/): `reflect-global.css` + `reflect-kanban-final.css`.
+An interactive before/after mockup lives at
+[mockups/kanban-reflect-v2.html](mockups/kanban-reflect-v2.html)
+(variants: Current / Refined / Expressive / Multica, plus `?variant=final`
+to preview the exact shipped CSS).
 
 ## Font Loading
 
