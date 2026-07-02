@@ -4,6 +4,42 @@ All notable changes to the **Reflect** theme are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). The full
 commit-level history lives in git; this file is the human-readable summary.
 
+## 2026-07-01 — Dashboard-wide pass: chips, switches, buttons, charts, logs
+
+Extends the Kanban/Multica language to every dashboard page (Sessions,
+Cron, Models, Skills, Plugins, Channels, MCP, Webhooks, Pairing, Profiles,
+Config, Keys, System, Analytics, Logs). Selector anchors were verified
+against the compiled design-system bundle. Survey mockup with a
+current/proposed toggle: `mockups/dashboard-reflect.html`.
+
+### Added
+- **Chart + dashboard-hero tokens** the dashboard reads but the theme never
+  defined: `--series-input-token` (indigo) / `--series-output-token`
+  (emerald) re-brand every custom SVG chart away from the default theme's
+  cream, and `--theme-accent-secondary` / `--theme-text` / `--theme-card` /
+  `--theme-border` feed the Dashboard page's hero widgets.
+- **Log viewer treatment**: debug lines dimmed, warning/error lines get a
+  subtle amber/red row wash (log lines are level-classed; the
+  `hover:bg-secondary/20` utility is their stable signature).
+
+### Changed
+- **Every DS Badge reshaped** from the terminal chip look (`font-compressed`,
+  `tracking-[0.2em]`, square corners — "s c h e d u l e d") into the quiet
+  pill the Kanban drawer uses: Inter, normal tracking, rounded-full, with
+  success/warning/destructive tones softened into washes.
+- **Toggle switches rounded into pills** (round thumb, white when on). The
+  DS switch is deliberately boxy; Reflect opts for the standard control.
+
+### Fixed
+- **Filled-vs-outlined button state was erased.** The DS conveys active
+  state as filled vs outlined (e.g. the Models 7d/30d/90d period picker);
+  the old blanket rules painted both solid primary. Outlined DS buttons are
+  now a quiet outline that fills on hover, so the active option reads again.
+- **Translucent primary washes were flattened to solid indigo.** The
+  `[class*="bg-primary/"]` rule caught `bg-primary/10` chat bubbles and
+  primary-tone badges; now matched word-exact (`[class~="bg-primary"]`).
+- Radius normalization no longer squares `[role="switch"]` roots.
+
 ## 2026-07-01 — Multica drawer: two-pane layout, status accents, document prose
 
 A full redesign of the Kanban task drawer against multica's actual issue

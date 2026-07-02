@@ -2,6 +2,14 @@
 
 Capture these pages to showcase the theme. All screenshots should be at 1440×900 or wider.
 
+> **Stale as of 2026-07-01:** every live capture below predates the
+> dashboard-wide pass (badge pills, pill switches, outlined buttons, chart
+> re-brand, log washes) and the Kanban Multica redesign. They still show the
+> theme's palette correctly but not the current component styling — retake
+> when convenient. Mockup renders for the new work live in
+> `mockups/screenshots/` (`dash-current.png` / `dash-proposed.png` for the
+> dashboard pass, `final-*.png` for Kanban).
+
 ## Must-have screenshots
 
 - [x] **Sessions page** — `screenshots/sessions-overview.png`. Sidebar + session list + session detail.

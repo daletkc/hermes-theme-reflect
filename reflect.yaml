@@ -202,9 +202,12 @@ customCSS: |-
     box-shadow: 0 0 0 1px var(--color-primary, #6366f1) !important;
   }
 
-  /* semantic color utilities */
+  /* semantic color utilities.
+   * bg-primary is matched word-exact ([class~=]) on purpose: the old
+   * [class*="bg-primary/"] form also flattened translucent washes
+   * (bg-primary/10 chat bubbles, primary-tone badges) into solid indigo. */
   .text-primary { color: #6366f1 !important; }
-  .bg-primary, [class*="bg-primary/"] { color: #FFFFFF !important; background-color: #6366f1 !important; }
+  [class~="bg-primary"] { color: #FFFFFF !important; background-color: #6366f1 !important; }
   .text-success, [class*="text-success"], .bg-success, .text-emerald-400, .text-emerald-500 { color: #22c55e !important; }
   .text-warning, [class*="text-warning"], .bg-warning, .text-amber-400, .text-amber-500 { color: #f59e0b !important; }
   .text-destructive, [class*="text-destructive"], .bg-destructive, .text-red-400, .text-red-500 { color: #EF4444 !important; }
@@ -218,7 +221,11 @@ customCSS: |-
   [class*="rounded-2xl"]:not(.hermes-kanban-card):not(.hermes-kanban-column),
   [class*="rounded-xl"]:not(.hermes-kanban-card):not(.hermes-kanban-column) { border-radius: var(--radius, 0.5rem) !important; }
 
-  button[class*="font-mono"][class*="bg-transparent"][class*="shadow-midground"],
+  /* DS buttons: the design system conveys state as filled vs outlined
+   * (e.g. the Models 7d/30d/90d period picker). The old rule painted BOTH
+   * solid primary, erasing the active state. Filled stays solid primary;
+   * outlined becomes a quiet outline that fills on hover. */
+  button[class~="bg-midground"],
   [class*="shadow-[inset_-1px_-1px_0_0_#00000080"] {
     background: var(--color-primary, #6366f1) !important;
     color: #FFFFFF !important;
@@ -229,6 +236,22 @@ customCSS: |-
     box-shadow: none !important;
     border: none !important;
     text-transform: none !important;
+  }
+  button[class*="bg-transparent"][class*="shadow-midground"]:not([class*="shadow-[inset"]) {
+    background: transparent !important;
+    color: var(--color-muted-foreground) !important;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-border, #24304A) 90%, transparent) !important;
+    border: none !important;
+    border-radius: var(--radius, 0.5rem) !important;
+    font-family: var(--theme-font-sans) !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    transition: background-color 130ms var(--ease), color 130ms var(--ease) !important;
+  }
+  button[class*="bg-transparent"][class*="shadow-midground"]:not([class*="shadow-[inset"]):hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-foreground) 7%, transparent) !important;
+    color: var(--color-foreground) !important;
   }
   button[class*="tracking-[0.15em]"][class*="uppercase"] { letter-spacing: 0 !important; text-transform: none !important; }
   button:not(.hermes-kanban-column-add):not([type="checkbox"]):not(.lucide) {
@@ -290,12 +313,77 @@ customCSS: |-
   }
 
   input[type="search"], input[placeholder="Search..."], input[placeholder="Search…"], input[placeholder="Filter cards…"] { border-radius: var(--radius, 0.5rem) !important; }
-  button[class*="rounded-full"], button[class*="text-xs"][class*="border"][class*="rounded"] { border-radius: var(--r-sm, 0.375rem) !important; letter-spacing: 0 !important; }
+  button[class*="rounded-full"]:not([role="switch"]), button[class*="text-xs"][class*="border"][class*="rounded"] { border-radius: var(--r-sm, 0.375rem) !important; letter-spacing: 0 !important; }
   button[class*="bg-foreground"], button[class*="bg-secondary"] {
     background: color-mix(in srgb, var(--color-primary, #6366f1) 15%, transparent) !important;
     color: var(--color-primary, #6366f1) !important;
     border-radius: var(--r-sm, 0.375rem) !important;
   }
+
+  /* ============================================================================
+   * Dashboard-wide Multica pass (2026-07)
+   * Extends the Kanban chip/control language to every dashboard page.
+   * Selector anchors verified against the compiled DS bundle
+   * (web/dist-test/assets/index-*.js).
+   * ========================================================================== */
+
+  /* 1. tokens the dashboard reads but the theme never set:
+   *    custom SVG charts (Analytics, dashboard widgets) + dashboard hero. */
+  :root {
+    --series-input-token: #7C7FF7;   /* input tokens: indigo */
+    --series-output-token: #34d399;  /* output tokens: emerald */
+    --theme-accent-secondary: #8b5cf6;
+    --theme-text: #E6EAF2;
+    --theme-card: #11182A;
+    --theme-border: #24304A;
+  }
+
+  /* 2. DS Badge: base is "font-compressed text-display px-2 py-1
+   *    tracking-[0.2em]" with square corners — the terminal chip look.
+   *    Reshape every badge into the quiet pill the Kanban drawer uses. */
+  [class*="font-compressed"][class*="items-center"][class*="px-2"] {
+    font-family: var(--theme-font-sans) !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.01em !important;
+    text-transform: none !important;
+    line-height: 1.4 !important;
+    padding: 0.15rem 0.65rem !important;
+    border-radius: var(--r-full, 999px) !important;
+  }
+  /* tone washes: soften the raw semantic colors toward the foreground */
+  [class*="font-compressed"][class*="bg-success/15"] {
+    background: var(--success-wash, rgba(34,197,94,0.16)) !important;
+    border-color: color-mix(in srgb, var(--color-success, #22c55e) 35%, transparent) !important;
+    color: color-mix(in srgb, var(--color-success, #22c55e) 75%, var(--color-foreground)) !important;
+  }
+  [class*="font-compressed"][class*="bg-warning/15"] {
+    background: var(--warning-wash, rgba(245,158,11,0.16)) !important;
+    border-color: color-mix(in srgb, var(--color-warning, #f59e0b) 35%, transparent) !important;
+    color: color-mix(in srgb, var(--color-warning, #f59e0b) 75%, var(--color-foreground)) !important;
+  }
+  [class*="font-compressed"][class*="bg-destructive/15"] {
+    background: var(--danger-wash, rgba(239,68,68,0.16)) !important;
+    border-color: color-mix(in srgb, var(--color-destructive, #EF4444) 35%, transparent) !important;
+    color: color-mix(in srgb, var(--color-destructive, #EF4444) 75%, var(--color-foreground)) !important;
+  }
+
+  /* 3. switches: the DS switch is deliberately boxy (square root + square
+   *    thumb). Reflect rounds it into a standard pill so on/off reads
+   *    instantly. Root on/off colors come from the [role="switch"] rules
+   *    above; this adds shape + thumb treatment. */
+  button[role="switch"] { border-radius: var(--r-full, 999px) !important; }
+  button[role="switch"] > span { border-radius: var(--r-full, 999px) !important; }
+  button[role="switch"][aria-checked="true"] > span { background: #FFFFFF !important; }
+  button[role="switch"][aria-checked="false"] > span { background: color-mix(in srgb, var(--color-foreground) 45%, transparent) !important; }
+
+  /* 4. log viewer: lines carry level classes + a hover:bg-secondary/20
+   *    utility (stable signature of a log line). Dim debug, tint
+   *    warning/error rows so problems pop out of the scroll. */
+  div[class*="hover:bg-secondary/20"] { border-radius: 4px; }
+  div[class*="hover:bg-secondary/20"].text-muted-foreground { color: var(--fg-subtle, #6B7A8E) !important; }
+  div[class*="hover:bg-secondary/20"].text-warning { background: color-mix(in srgb, var(--color-warning, #f59e0b) 7%, transparent); }
+  div[class*="hover:bg-secondary/20"].text-destructive { background: color-mix(in srgb, var(--color-destructive, #EF4444) 8%, transparent); }
 
   /* ============================================================================
    * Reflect — Kanban plugin overrides (Multica edition)

@@ -117,6 +117,34 @@ to preview the exact shipped CSS). The board and drawer images above are
 renders of that mockup — faithful markup + the shipped theme CSS — not live
 dashboard captures.
 
+### Dashboard-wide styling
+
+The same language extends to every page (Sessions, Cron, Models, Skills,
+Plugins, Channels, MCP, Webhooks, Pairing, Profiles, Config, Keys, System,
+Analytics, Logs), with selector anchors verified against the compiled
+design-system bundle:
+
+- **Badges everywhere become quiet pills** — the DS ships every badge as a
+  wide-tracked terminal chip (`s c h e d u l e d`); Reflect reshapes them to
+  Inter, normal tracking, rounded-full, with semantic tones as soft washes
+- **Filled-vs-outlined button state restored** (the Models period picker and
+  friends) — outlined DS buttons render as quiet outlines that fill on hover
+- **Toggle switches become standard pills** with round thumbs
+- **Charts pick up the palette** via `--series-input-token` (indigo) and
+  `--series-output-token` (emerald); the Dashboard hero reads
+  `--theme-accent-secondary`, `--theme-text`, `--theme-card`, `--theme-border`
+- **Log viewer**: debug dimmed, warning/error rows washed amber/red
+- Translucent `bg-primary/10` washes (chat bubbles, primary badges) are no
+  longer flattened to solid indigo
+
+Survey mockup with a live current/proposed toggle:
+[mockups/dashboard-reflect.html](mockups/dashboard-reflect.html) — six page
+slices (Sessions, Cron, Models, Channels + Skills, Logs, Analytics).
+
+| Current | Proposed (shipped) |
+|---|---|
+| ![Dashboard slices, current rendering](mockups/screenshots/dash-current.png) | ![Dashboard slices, proposed rendering](mockups/screenshots/dash-proposed.png) |
+
 ## Font Loading
 
 The theme loads **Inter** (weights 300–700) and **Geist Mono** (weights 400–600) from Google Fonts via the `fontUrl` field. If you're running the dashboard behind a firewall without outbound internet:

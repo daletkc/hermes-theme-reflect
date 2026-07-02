@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflect — dashboard survey mockup (current vs proposed)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ============ shared Reflect tokens + page shell ============ -->
+<style id="css-vars">
+:root{
+  --bg:#0A0E1A;--card:#11182A;--surface-2:#151D32;--muted:#1B2740;--input:#0F1728;
+  --border:#24304A;--border-soft:#1F2D45;
+  --fg:#E6EAF2;--fg-muted:#8B95A8;--fg-subtle:#6B7A8E;
+  --primary:#6366f1;--accent:#8b5cf6;--primary-hi:#7C7FF7;--accent-hi:#9D75F8;
+  --success:#22c55e;--warning:#f59e0b;--danger:#EF4444;
+  --primary-wash:rgba(99,102,241,0.14);--success-wash:rgba(34,197,94,0.14);
+  --warning-wash:rgba(245,158,11,0.14);--danger-wash:rgba(239,68,68,0.14);
+  --r-sm:0.375rem;--r:0.5rem;--r-lg:0.75rem;--r-full:999px;
+  --shadow-rest:0 1px 2px rgba(0,0,0,0.45);
+  --highlight:inset 0 1px 0 rgba(255,255,255,0.05);
+  --ease:cubic-bezier(0.16,1,0.3,1);--fast:130ms;
+  --sans:"Inter",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;
+  line-height:1.5;letter-spacing:-0.005em;font-feature-settings:"cv11","ss01"}
+body::before{content:"";position:fixed;inset:-10% -10% auto -10%;height:70vh;z-index:-2;
+  background:radial-gradient(46rem 32rem at 16% -4%,oklch(0.62 0.22 277 / 0.30),transparent 60%),
+             radial-gradient(40rem 30rem at 60% -10%,oklch(0.60 0.25 330 / 0.20),transparent 60%);
+  pointer-events:none}
+body::after{content:"";position:fixed;inset:0;z-index:-1;opacity:0.035;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:rgba(36,48,74,0.7);border-radius:3px}
+.page{max-width:1180px;margin:0 auto;padding:2.2rem 2rem 7rem}
+.page h1{font-size:1.375rem;font-weight:600;letter-spacing:-0.02em;margin:0 0 0.4rem}
+.page .sub{color:var(--fg-subtle);font-size:0.8125rem;margin-bottom:2.2rem}
+.slice{margin:2.8rem 0}
+.slice-label{display:flex;align-items:center;gap:0.7rem;font-size:0.72rem;font-weight:600;
+  letter-spacing:0.09em;text-transform:uppercase;color:var(--fg-subtle);margin-bottom:0.9rem}
+.slice-label::after{content:"";flex:1;height:1px;background:var(--border-soft)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
+  box-shadow:var(--shadow-rest),var(--highlight)}
+.card-head{display:flex;align-items:center;gap:0.6rem;padding:1rem 1.25rem 0.75rem;font-weight:600;font-size:0.9375rem}
+.card-head .ico{opacity:0.7}
+.card-body{padding:0 1.25rem 1.1rem}
+.btn-primary{background:var(--primary);color:#fff;border-radius:6px;font-size:12.5px;font-weight:500;
+  padding:5px 12px;min-height:28px;display:inline-flex;align-items:center}
+.mono{font-family:var(--mono)}
+.row-meta{color:var(--fg-muted);font-size:0.75rem}
+.icon-btn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-sm);font-size:0.8rem}
+/* demo chrome */
+.demo-bar{position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);z-index:200;display:flex;align-items:center;gap:0.6rem;
+  background:rgba(13,18,34,0.94);border:1px solid var(--border-soft);border-radius:var(--r-full);
+  padding:0.35rem 0.5rem 0.35rem 1rem;box-shadow:0 16px 32px -8px rgba(0,0,0,0.6)}
+.demo-bar-label{font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-subtle)}
+.demo-seg{display:flex;background:var(--input);border:1px solid var(--border-soft);border-radius:var(--r-full);padding:2px}
+.demo-seg button{border-radius:var(--r-full);padding:0.3rem 0.95rem;font-size:0.8rem;font-weight:500;color:var(--fg-muted)}
+.demo-seg button[aria-pressed="true"]{background:var(--primary);color:#fff}
+/* chart bars: give each bar a definite height so the percentage segments resolve */
+.chart .bars .bar{height:100%}
+</style>
+
+<!-- ============ CURRENT rendering (approximates today's live captures) ============ -->
+<style id="css-current">
+/* terminal chips: wide-tracked mono, bordered */
+.chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:0.72rem;
+  letter-spacing:0.18em;padding:0.15rem 0.6rem;border:1px solid var(--border);border-radius:4px;color:var(--fg)}
+.chip--ok{color:#2fdf7f;border-color:rgba(34,197,94,0.5)}
+.chip--ok::before{content:"● ";font-size:0.6rem}
+.chip--warn{color:var(--warning);border-color:rgba(245,158,11,0.5)}
+/* nested cards: rows are cards inside cards */
+.rows .row{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);
+  padding:0.8rem 1rem;margin-bottom:0.7rem;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap}
+.rows .row:last-child{margin-bottom:0}
+/* cron action icons always colored */
+.icon-btn--pause{color:var(--warning)}
+.icon-btn--run{color:var(--warning)}
+.icon-btn--del{color:var(--danger)}
+/* models: metric header with dotted leaders + tracking */
+.metric-line{display:flex;align-items:baseline;gap:0.8rem;font-family:var(--mono)}
+.metric-line .n{font-size:1.05rem;font-weight:600}
+.metric-line .leader{flex:1;border-bottom:1px dotted rgba(255,255,255,0.25);transform:translateY(-4px)}
+.metric-line .lbl{letter-spacing:0.3em;font-size:0.8rem;color:var(--fg)}
+/* segmented period: active state erased (all filled) */
+.seg button{background:var(--primary);color:#fff;border-radius:6px;font-size:12.5px;font-weight:500;
+  padding:5px 12px;margin-left:6px}
+/* model cards grid */
+.model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.model-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:0.9rem 1rem;min-height:180px;
+  display:flex;flex-direction:column}
+.model-card .top{display:flex;justify-content:space-between;gap:0.5rem;align-items:baseline}
+.model-card .name{font-family:var(--mono);font-weight:600;font-size:0.9rem}
+.model-card .rank{color:var(--fg-muted);font-family:var(--mono);font-size:0.8rem;margin-right:0.3rem}
+.model-card .sessions{text-align:right;font-size:0.75rem;color:var(--fg-muted)}
+.model-card .sessions b{display:block;font-size:0.95rem;color:var(--fg)}
+.model-card .prov{margin:0.5rem 0 0.2rem}
+.model-card .ctx{font-size:0.72rem;color:var(--fg-muted);font-family:var(--mono)}
+.model-card .spacer{flex:1}
+.model-card .foot{display:flex;gap:0.35rem;align-items:center;flex-wrap:wrap}
+.model-card .ago{margin-left:auto;font-size:0.72rem;color:var(--fg-muted)}
+.cap{font-size:0.68rem;padding:0.1rem 0.45rem;border:1px solid var(--border);border-radius:4px;font-family:var(--mono);letter-spacing:0.06em}
+.cap--tools{color:#2fdf7f}.cap--vision{color:#60a5fa}.cap--reason{color:#c084fc}
+.useas{background:var(--primary);color:#fff;border-radius:6px;font-size:12px;font-weight:500;padding:3px 10px}
+/* switches: squared by the radius-flattening rule */
+.switch{width:40px;height:22px;background:var(--input);border:1px solid var(--border);border-radius:var(--r-sm);
+  position:relative;flex:none}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:3px;
+  transition:transform var(--fast) var(--ease)}
+.switch[data-on]{background:var(--primary);border-color:var(--primary)}
+.switch[data-on]::after{transform:translateX(18px)}
+/* config rows: nested cards again */
+.cfg .row{align-items:flex-start}
+.cfg .desc{font-family:var(--mono);font-size:0.75rem;color:var(--fg-muted);letter-spacing:0.02em;line-height:1.6}
+/* logs */
+.logfilters{display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:0.8rem;font-size:0.72rem;align-items:center}
+.logfilters .grp{display:flex;align-items:center;gap:0.4rem}
+.logfilters .grp>span{color:var(--fg-muted)}
+.logfilters .pill{border:1px solid var(--border);border-radius:var(--r-sm);padding:0.2rem 0.6rem;
+  font-family:var(--mono);letter-spacing:0.1em;color:var(--fg-muted)}
+.logfilters .pill[data-on]{background:var(--primary-wash);color:var(--primary-hi);border-color:rgba(99,102,241,0.4)}
+.logcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.2rem;
+  font-family:var(--mono);font-size:0.75rem;line-height:1.7;overflow-x:auto}
+.log-info{color:var(--fg)}
+.log-debug{color:var(--fg-muted)}
+.log-warning{color:var(--warning)}
+.log-error{color:var(--danger)}
+/* analytics: default cream/emerald series tokens (theme never overrides) */
+.chart{--series-input:#ffe6cb;--series-output:#34d399}
+.chart .bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding:0.5rem 0 0.3rem}
+.chart .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.chart .seg-in{background:color-mix(in srgb,var(--series-input) 70%,transparent)}
+.chart .seg-out{background:color-mix(in srgb,var(--series-output) 70%,transparent)}
+.chart .legend{display:flex;gap:1.2rem;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--fg-muted)}
+.chart .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:0.35rem}
+.chart .dot-in{background:var(--series-input)}
+.chart .dot-out{background:var(--series-output)}
+</style>
+
+<!-- ============ PROPOSED (Reflect v2 dashboard language) ============ -->
+<style id="css-proposed" media="not all">
+/* chips: quiet wash chips, sans, normal tracking, status dot */
+.chip{display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--sans);font-size:0.72rem;font-weight:500;
+  letter-spacing:0 !important;padding:0.15rem 0.65rem;border:1px solid color-mix(in srgb,var(--border) 60%,transparent);
+  border-radius:var(--r-full);color:var(--fg-muted);background:color-mix(in srgb,var(--fg) 5%,transparent);text-transform:capitalize}
+.chip.mono-keep{font-family:var(--mono);text-transform:none}
+.chip--ok{background:var(--success-wash);border-color:color-mix(in srgb,var(--success) 35%,transparent);
+  color:color-mix(in srgb,var(--success) 75%,var(--fg))}
+.chip--ok::before{content:"";width:6px;height:6px;border-radius:var(--r-full);background:var(--success);font-size:0}
+.chip--warn{background:var(--warning-wash);border-color:color-mix(in srgb,var(--warning) 35%,transparent);
+  color:color-mix(in srgb,var(--warning) 75%,var(--fg))}
+.chip--warn::before{content:"";width:6px;height:6px;border-radius:var(--r-full);background:var(--warning)}
+/* record lists instead of nested cards */
+.rows .row{background:color-mix(in srgb,var(--fg) 3%,transparent);border:1px solid color-mix(in srgb,var(--fg) 9%,transparent);
+  border-top-width:0;border-radius:0;padding:0.7rem 1rem;margin:0;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;
+  transition:background-color 120ms var(--ease)}
+.rows .row:first-child{border-top-width:1px;border-radius:var(--r) var(--r) 0 0}
+.rows .row:last-child{border-radius:0 0 var(--r) var(--r)}
+.rows .row:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+/* cron action icons: quiet until hover */
+.icon-btn{color:var(--fg-subtle);transition:color var(--fast) var(--ease),background-color var(--fast) var(--ease)}
+.icon-btn:hover{background:color-mix(in srgb,var(--fg) 8%,transparent)}
+.icon-btn--pause:hover{color:var(--warning)}
+.icon-btn--run:hover{color:var(--primary-hi)}
+.icon-btn--del:hover{color:var(--danger)}
+/* models: metric block instead of dotted-leader banner */
+.metric-line{display:flex;flex-direction:column;gap:0.1rem;font-family:var(--sans)}
+.metric-line .n{font-size:1.75rem;font-weight:600;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.15}
+.metric-line .leader{display:none}
+.metric-line .lbl{letter-spacing:0;font-size:0.75rem;color:var(--fg-muted);text-transform:none;font-weight:400}
+/* segmented period: active filled, inactive ghost */
+.seg{display:inline-flex;background:var(--input);border:1px solid var(--border-soft);border-radius:var(--r-sm);padding:2px}
+.seg button{background:transparent;color:var(--fg-muted);border-radius:4px;font-size:12.5px;font-weight:500;
+  padding:4px 12px;margin:0;transition:background-color var(--fast) var(--ease),color var(--fast) var(--ease)}
+.seg button:hover{color:var(--fg)}
+.seg button[data-on]{background:var(--primary);color:#fff}
+/* model cards: compact rows, chips docked, no dead space */
+.model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.model-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:0.85rem 1rem;
+  min-height:0;display:flex;flex-direction:column;gap:0.55rem;box-shadow:var(--shadow-rest),var(--highlight)}
+.model-card .top{display:flex;justify-content:space-between;gap:0.5rem;align-items:baseline}
+.model-card .name{font-family:var(--mono);font-weight:600;font-size:0.9rem}
+.model-card .rank{color:var(--fg-subtle);font-family:var(--mono);font-size:0.78rem;margin-right:0.3rem;font-variant-numeric:tabular-nums}
+.model-card .sessions{text-align:right;font-size:0.72rem;color:var(--fg-muted)}
+.model-card .sessions b{display:block;font-size:1.05rem;color:var(--fg);font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+.model-card .prov{margin:0}
+.model-card .ctx{font-size:0.72rem;color:var(--fg-muted);font-family:var(--mono);font-variant-numeric:tabular-nums}
+.model-card .spacer{display:none}
+.model-card .foot{display:flex;gap:0.3rem;align-items:center;flex-wrap:wrap;padding-top:0.15rem}
+.model-card .ago{margin-left:auto;font-size:0.72rem;color:var(--fg-subtle);font-variant-numeric:tabular-nums}
+.cap{font-size:0.68rem;font-weight:500;padding:0.1rem 0.5rem;border-radius:var(--r-full);font-family:var(--sans);letter-spacing:0;border:1px solid transparent}
+.cap--tools{background:var(--success-wash);color:color-mix(in srgb,var(--success) 75%,var(--fg));border-color:color-mix(in srgb,var(--success) 30%,transparent)}
+.cap--vision{background:rgba(96,165,250,0.14);color:#8fbcf9;border-color:rgba(96,165,250,0.3)}
+.cap--reason{background:rgba(192,132,252,0.14);color:#cf9df9;border-color:rgba(192,132,252,0.3)}
+.cap--family{background:color-mix(in srgb,var(--fg) 6%,transparent);color:var(--fg-muted);border-color:color-mix(in srgb,var(--border) 60%,transparent)}
+.useas{background:var(--primary-wash);color:var(--primary-hi);box-shadow:inset 0 0 0 1px rgba(99,102,241,0.28);
+  border-radius:6px;font-size:12px;font-weight:500;padding:3px 10px;transition:background-color var(--fast) var(--ease)}
+.useas:hover{background:rgba(99,102,241,0.24)}
+/* switches: restored pills */
+.switch{width:38px;height:21px;background:var(--input);border:1px solid var(--border);border-radius:var(--r-full);
+  position:relative;flex:none;transition:background-color var(--fast) var(--ease)}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;background:#fff;border-radius:var(--r-full);
+  transition:transform var(--fast) var(--ease)}
+.switch[data-on]{background:var(--primary);border-color:var(--primary)}
+.switch[data-on]::after{transform:translateX(17px)}
+/* config rows: sans descriptions, record list */
+.cfg .row{align-items:flex-start}
+.cfg .desc{font-family:var(--sans);font-size:0.78rem;color:var(--fg-muted);letter-spacing:0;line-height:1.55;max-width:72ch}
+/* logs: quieter filters, level-tinted rows, muted block */
+.logfilters{display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:0.8rem;font-size:0.72rem;align-items:center}
+.logfilters .grp{display:flex;align-items:center;gap:0.4rem}
+.logfilters .grp>span{color:var(--fg-subtle)}
+.logfilters .pill{border:1px solid transparent;border-radius:var(--r-sm);padding:0.2rem 0.6rem;
+  font-family:var(--sans);letter-spacing:0;font-weight:500;color:var(--fg-muted);text-transform:capitalize}
+.logfilters .pill:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.logfilters .pill[data-on]{background:var(--primary-wash);color:var(--primary-hi)}
+.logcard{background:color-mix(in srgb,var(--muted) 45%,var(--card));border:none;border-radius:var(--r-lg);
+  box-shadow:var(--highlight);padding:1rem 1.2rem;font-family:var(--mono);font-size:0.75rem;line-height:1.75;overflow-x:auto}
+.logcard>div{padding:0 0.5rem;margin:0 -0.5rem;border-radius:4px}
+.logcard>div:hover{background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.log-info{color:color-mix(in srgb,var(--fg) 78%,transparent)}
+.log-debug{color:var(--fg-subtle)}
+.log-warning{color:color-mix(in srgb,var(--warning) 80%,var(--fg));background:color-mix(in srgb,var(--warning) 7%,transparent)}
+.log-error{color:color-mix(in srgb,var(--danger) 85%,var(--fg));background:color-mix(in srgb,var(--danger) 8%,transparent)}
+/* analytics: Reflect-branded series tokens */
+.chart{--series-input:#7C7FF7;--series-output:#34d399}
+.chart .bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding:0.5rem 0 0.3rem}
+.chart .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.chart .seg-in{background:color-mix(in srgb,var(--series-input) 75%,transparent);border-radius:2px 2px 0 0}
+.chart .seg-out{background:color-mix(in srgb,var(--series-output) 70%,transparent);border-radius:2px}
+.chart .legend{display:flex;gap:1.2rem;font-family:var(--sans);font-size:0.72rem;letter-spacing:0;color:var(--fg-muted)}
+.chart .dot{display:inline-block;width:8px;height:8px;border-radius:var(--r-full);margin-right:0.35rem}
+.chart .dot-in{background:var(--series-input)}
+.chart .dot-out{background:var(--series-output)}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Reflect — dashboard-wide survey</h1>
+  <div class="sub">Representative slices of six pages, rendered in the current theme and a proposed pass that extends the Kanban/Multica language dashboard-wide. Toggle below.</div>
+
+  <!-- ============ 1. SESSIONS ============ -->
+  <div class="slice">
+    <div class="slice-label">Sessions · Overview</div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-head"><span class="ico">((•))</span> Connected Platforms</div>
+      <div class="card-body">
+        <div class="rows">
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">discord</div>
+              <div class="row-meta">Last update: 1h ago</div>
+            </div>
+            <span class="chip chip--ok">Connected</span>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">api_server</div>
+              <div class="row-meta">Last update: 1h ago</div>
+            </div>
+            <span class="chip chip--ok">Connected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="ico">◷</span> Recent Sessions</div>
+      <div class="card-body">
+        <div class="rows">
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">Hermes Dashboard Port vs Build Analysis</div>
+              <div class="row-meta mono">glm-5.1:cloud · 161 msgs · 8m ago</div>
+              <div class="row-meta" style="margin-top:2px">We need to work on a project to review POSSIBLY porting ov...</div>
+            </div>
+            <span class="chip mono-keep">discord</span>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">Fixing Inconsistent Button Styles</div>
+              <div class="row-meta mono">glm-5.1:cloud · 164 msgs · 58m ago</div>
+              <div class="row-meta" style="margin-top:2px">[The user sent an image but I couldn't quite see it this tim...</div>
+            </div>
+            <span class="chip mono-keep">discord</span>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">Untitled</div>
+              <div class="row-meta mono">glm-5.1:cloud · 6 msgs · 1h ago</div>
+              <div class="row-meta" style="margin-top:2px">work kanban task t_60cf559f</div>
+            </div>
+            <span class="chip mono-keep">cli</span>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.875rem">Make Hermes Kanban Responsive</div>
+              <div class="row-meta mono">glm-5.1:cloud · 150 msgs · 1h ago</div>
+              <div class="row-meta" style="margin-top:2px">On the kanban in hermes dashboard, https://hermes.makeflow.d...</div>
+            </div>
+            <span class="chip mono-keep">discord</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2. CRON ============ -->
+  <div class="slice">
+    <div class="slice-label">Cron · Scheduled jobs</div>
+    <div class="card">
+      <div class="card-head"><span class="ico">◷</span> Scheduled Jobs (3)</div>
+      <div class="card-body">
+        <div class="rows">
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                <span style="font-weight:600;font-size:0.875rem">hermes-version-check</span>
+                <span class="chip chip--ok">Scheduled</span>
+                <span class="chip">default</span>
+                <span class="chip mono-keep">origin</span>
+              </div>
+              <div class="row-meta mono" style="margin-top:4px">0 7 * * * &nbsp; Last: 5/25/2026, 2:00:10 AM &nbsp; Next: 5/26/2026, 2:00:00 AM</div>
+            </div>
+            <div style="display:flex;gap:0.2rem">
+              <button class="icon-btn icon-btn--pause" title="Pause">⏸</button>
+              <button class="icon-btn icon-btn--run" title="Run now">⚡</button>
+              <button class="icon-btn icon-btn--del" title="Delete">🗑</button>
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                <span style="font-weight:600;font-size:0.875rem">daily-upstream-sync</span>
+                <span class="chip chip--ok">Scheduled</span>
+                <span class="chip">default</span>
+                <span class="chip mono-keep">discord</span>
+              </div>
+              <div class="row-meta mono" style="margin-top:4px">0 6 * * * &nbsp; Last: 5/25/2026, 1:01:08 AM &nbsp; Next: 5/26/2026, 1:00:00 AM</div>
+            </div>
+            <div style="display:flex;gap:0.2rem">
+              <button class="icon-btn icon-btn--pause" title="Pause">⏸</button>
+              <button class="icon-btn icon-btn--run" title="Run now">⚡</button>
+              <button class="icon-btn icon-btn--del" title="Delete">🗑</button>
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                <span style="font-weight:600;font-size:0.875rem">ops-digest-weekly</span>
+                <span class="chip chip--warn">Paused</span>
+                <span class="chip">default</span>
+                <span class="chip mono-keep">origin</span>
+              </div>
+              <div class="row-meta mono" style="margin-top:4px">0 8 * * 1 &nbsp; Last: 5/19/2026, 8:00:04 AM &nbsp; Next: —</div>
+            </div>
+            <div style="display:flex;gap:0.2rem">
+              <button class="icon-btn icon-btn--pause" title="Resume">▶</button>
+              <button class="icon-btn icon-btn--run" title="Run now">⚡</button>
+              <button class="icon-btn icon-btn--del" title="Delete">🗑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3. MODELS ============ -->
+  <div class="slice">
+    <div class="slice-label">Models · Usage</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:1rem;flex-wrap:wrap">
+      <div style="display:flex;gap:2.5rem">
+        <div class="metric-line"><span class="n">14</span><span class="leader"></span><span class="lbl">MODELS USED</span></div>
+        <div class="metric-line"><span class="n">390</span><span class="leader"></span><span class="lbl">TOTAL SESSIONS</span></div>
+      </div>
+      <div class="seg">
+        <button>7d</button><button data-on>30d</button><button>90d</button>
+      </div>
+    </div>
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="top">
+          <div><span class="rank">#1</span><span class="name">kimi-k2.6</span></div>
+          <div class="sessions"><b>296</b>sessions</div>
+        </div>
+        <div class="prov"><span class="chip mono-keep">ollama-cloud</span> <span class="ctx">262.1K ctx · 262.1K out</span></div>
+        <div class="spacer"></div>
+        <div class="foot">
+          <span class="cap cap--tools">Tools</span><span class="cap cap--vision">Vision</span><span class="cap cap--reason">Reasoning</span><span class="cap cap--family">kimi</span>
+          <span class="ago">yesterday</span>
+        </div>
+        <div style="margin-top:0.4rem"><button class="useas">Use as ▾</button></div>
+      </div>
+      <div class="model-card">
+        <div class="top">
+          <div><span class="rank">#2</span><span class="name">glm-5.1:cloud</span></div>
+          <div class="sessions"><b>15</b>sessions</div>
+        </div>
+        <div class="prov"><span class="chip mono-keep">ollama-cloud</span> <span class="ctx">202.8K ctx · 131.1K out</span></div>
+        <div class="spacer"></div>
+        <div class="foot">
+          <span class="cap cap--tools">Tools</span><span class="cap cap--reason">Reasoning</span><span class="cap cap--family">glm</span>
+          <span class="ago">45m ago</span>
+        </div>
+        <div style="margin-top:0.4rem"><button class="useas">Use as ▾</button></div>
+      </div>
+      <div class="model-card">
+        <div class="top">
+          <div><span class="rank">#3</span><span class="name">gpt-5.5</span></div>
+          <div class="sessions"><b>3</b>sessions</div>
+        </div>
+        <div class="prov"><span class="chip mono-keep">nous</span> <span class="ctx">1.0M ctx · 1.0M out</span></div>
+        <div class="spacer"></div>
+        <div class="foot">
+          <span class="cap cap--tools">Tools</span><span class="cap cap--vision">Vision</span><span class="cap cap--family">gpt</span>
+          <span class="ago">10d ago</span>
+        </div>
+        <div style="margin-top:0.4rem"><button class="useas">Use as ▾</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4. CHANNELS + SKILLS (config rows, switches) ============ -->
+  <div class="slice">
+    <div class="slice-label">Channels &amp; Skills · Toggles and status</div>
+    <div class="card cfg">
+      <div class="card-head"><span class="ico">⛓</span> Channels</div>
+      <div class="card-body">
+        <div class="rows">
+          <div class="row">
+            <span class="switch" data-on role="switch" aria-checked="true"></span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:0.6rem;align-items:center">
+                <span style="font-weight:600;font-size:0.875rem">telegram</span>
+                <span class="chip chip--ok">Connected</span>
+              </div>
+              <div class="desc">Long-polling bot transport. Requires TELEGRAM_BOT_TOKEN; pairing gates DMs to approved users.</div>
+            </div>
+            <button class="useas">Settings</button>
+          </div>
+          <div class="row">
+            <span class="switch" data-on role="switch" aria-checked="true"></span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:0.6rem;align-items:center">
+                <span style="font-weight:600;font-size:0.875rem">slack</span>
+                <span class="chip chip--warn">Pending Restart</span>
+              </div>
+              <div class="desc">Socket-mode app. Changes take effect after the gateway restarts.</div>
+            </div>
+            <button class="useas">Settings</button>
+          </div>
+          <div class="row">
+            <span class="switch" role="switch" aria-checked="false"></span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:0.6rem;align-items:center">
+                <span style="font-weight:600;font-size:0.875rem">whatsapp</span>
+                <span class="chip">Not Configured</span>
+              </div>
+              <div class="desc">Requires a paired device session. Configure credentials to enable.</div>
+            </div>
+            <button class="useas">Settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card cfg" style="margin-top:1rem">
+      <div class="card-head"><span class="ico">⬡</span> Skills</div>
+      <div class="card-body">
+        <div class="rows">
+          <div class="row">
+            <span class="switch" data-on role="switch" aria-checked="true"></span>
+            <div style="flex:1;min-width:0">
+              <div class="mono" style="font-weight:600;font-size:0.85rem">agent-web-publishing</div>
+              <div class="desc">Publish static websites instantly via agent-oriented hosting platforms (here.now, etc). Deploy HTML/CSS/JS, images, PDFs, and static files to live URLs with no account required.</div>
+            </div>
+          </div>
+          <div class="row">
+            <span class="switch" data-on role="switch" aria-checked="true"></span>
+            <div style="flex:1;min-width:0">
+              <div class="mono" style="font-weight:600;font-size:0.85rem">architecture-diagram</div>
+              <div class="desc">Dark-themed SVG architecture/cloud/infra diagrams as HTML.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 5. LOGS ============ -->
+  <div class="slice">
+    <div class="slice-label">Logs · Filters and viewer</div>
+    <div class="logfilters">
+      <div class="grp"><span>File</span>
+        <span class="pill" data-on>Agent</span><span class="pill">Errors</span><span class="pill">Gateway</span>
+      </div>
+      <div class="grp"><span>Level</span>
+        <span class="pill" data-on>All</span><span class="pill">Debug</span><span class="pill">Info</span><span class="pill">Warning</span><span class="pill">Error</span>
+      </div>
+      <div class="grp"><span>Lines</span>
+        <span class="pill">50</span><span class="pill" data-on>100</span><span class="pill">200</span>
+      </div>
+    </div>
+    <div class="logcard">
+      <div class="log-info">2026-05-25 13:36:06,749 INFO [20260525_132820_ba658876] agent.conversation_loop: API call #4: model=kimi-k2.6:cloud in=40551 out=501 total=41052</div>
+      <div class="log-debug">2026-05-25 13:36:06,753 DEBUG agent.tool_executor: tool skill_manage completed (0.00s, 99 chars)</div>
+      <div class="log-info">2026-05-25 13:36:08,381 INFO hermes_cli.web_server: Mounted plugin API routes: /api/plugins/kanban/</div>
+      <div class="log-warning">2026-05-25 13:36:13,656 WARNING aiohttp.access: 127.0.0.1 "GET /api/sessions/main/runtime HTTP/1.1" 404 174</div>
+      <div class="log-info">2026-05-25 13:36:14,403 INFO [20260525_132820_ba658876] agent.conversation_loop: API call #5: in=40895 out=296 total=41191 latency=7.6s</div>
+      <div class="log-error">2026-05-25 13:36:20,101 ERROR run_agent: OpenAI client error (stream_request_failed) provider=ollama-cloud retrying in 2.0s</div>
+      <div class="log-info">2026-05-25 13:36:29,846 INFO hermes_cli.web_server: Mounted plugin API routes: /api/plugins/example/</div>
+      <div class="log-debug">2026-05-25 13:36:57,368 DEBUG gateway.memory_monitor: [MEMORY] rss=315MB gc=(0, 11, 8) threads=15 uptime=7200s</div>
+    </div>
+  </div>
+
+  <!-- ============ 6. ANALYTICS ============ -->
+  <div class="slice">
+    <div class="slice-label">Analytics · Token usage (custom SVG charts, --series-* tokens)</div>
+    <div class="card">
+      <div class="card-head"><span class="ico">▤</span> Token Usage <span style="font-weight:400;color:var(--fg-subtle);font-size:0.75rem;margin-left:0.3rem">last 7 days</span></div>
+      <div class="card-body chart">
+        <div class="bars">
+          <div class="bar"><div class="seg-in" style="height:34%"></div><div class="seg-out" style="height:12%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:55%"></div><div class="seg-out" style="height:20%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:42%"></div><div class="seg-out" style="height:15%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:70%"></div><div class="seg-out" style="height:26%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:48%"></div><div class="seg-out" style="height:18%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:64%"></div><div class="seg-out" style="height:22%"></div></div>
+          <div class="bar"><div class="seg-in" style="height:82%"></div><div class="seg-out" style="height:30%"></div></div>
+        </div>
+        <div class="legend">
+          <span><span class="dot dot-in"></span>INPUT TOKENS</span>
+          <span><span class="dot dot-out"></span>OUTPUT TOKENS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- demo controls -->
+<div class="demo-bar">
+  <span class="demo-bar-label">Theme</span>
+  <div class="demo-seg" role="group" aria-label="Variant">
+    <button id="btn-current" aria-pressed="true">Current</button>
+    <button id="btn-proposed" aria-pressed="false">Proposed</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var cur = document.getElementById('css-current');
+  var pro = document.getElementById('css-proposed');
+  var bCur = document.getElementById('btn-current');
+  var bPro = document.getElementById('btn-proposed');
+  function set(mode) {
+    cur.media = mode === 'current' ? 'all' : 'not all';
+    pro.media = mode === 'proposed' ? 'all' : 'not all';
+    bCur.setAttribute('aria-pressed', String(mode === 'current'));
+    bPro.setAttribute('aria-pressed', String(mode === 'proposed'));
+  }
+  bCur.addEventListener('click', function () { set('current'); });
+  bPro.addEventListener('click', function () { set('proposed'); });
+  var v = new URLSearchParams(location.search).get('variant');
+  if (v === 'proposed') set('proposed');
+  document.querySelectorAll('.switch').forEach(function (sw) {
+    sw.addEventListener('click', function () {
+      if (sw.hasAttribute('data-on')) { sw.removeAttribute('data-on'); sw.setAttribute('aria-checked', 'false'); }
+      else { sw.setAttribute('data-on', ''); sw.setAttribute('aria-checked', 'true'); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
