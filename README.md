@@ -2,6 +2,8 @@
 
 A premium dark theme for the [Hermes Agent](https://github.com/NousResearch/hermes-agent) web dashboard. Deep navy surfaces with indigo-violet accents, aurora bloom behind hero content, and subtle film grain for depth.
 
+![Sessions overview with the Reflect theme](screenshots/sessions-overview.png)
+
 ## Install
 
 1. Download `reflect.yaml` into your dashboard themes directory:
@@ -28,6 +30,19 @@ Switch to a built-in theme first if Reflect was active:
 ```bash
 hermes config set dashboard.theme default
 ```
+
+## Screenshots
+
+Live dashboard captures:
+
+| | |
+|---|---|
+| ![Style guide](screenshots/style-guide-full.png) Style guide | ![Cron](screenshots/cron.png) Cron |
+| ![Logs](screenshots/logs.png) Logs | ![Models](screenshots/models.png) Models |
+| ![Plugins](screenshots/plugins.png) Plugins | ![Skills](screenshots/skills.png) Skills |
+
+Kanban board and task drawer screenshots are in the
+[Kanban styling](#kanban-styling) section below.
 
 ## Design Language
 
@@ -58,6 +73,9 @@ task drawer modeled directly on **multica's issue detail view**
 (`packages/views/issues`), mapped onto the Reflect palette.
 
 **Board**
+
+![Kanban board with the Multica card styling](mockups/screenshots/final-board.png)
+
 - **Status columns wrap into a responsive grid** (`auto-fill, minmax(280px, 1fr)`)
   instead of scrolling horizontally — every column stays in view
 - Cards: single border + shadow hover response (no lift; cards are drag handles),
@@ -67,6 +85,8 @@ task drawer modeled directly on **multica's issue detail view**
 - Outlined dropdown/select triggers; responsive single-column layout on mobile
 
 **Task detail drawer (multica two-pane)**
+
+![Task drawer: document column plus properties rail](mockups/screenshots/final-drawer-tall.png)
 - Wide panel (up to `min(1320px, 94vw)`) split into a **document column
   (max 56rem) + 300px properties rail** behind a full-height hairline; the rail
   collapses back into the flow below 1100px
@@ -82,12 +102,20 @@ task drawer modeled directly on **multica's issue detail view**
 - Action row with one primary action, tonal secondaries; Title Case labels;
   borderless pill dependency chips
 
+**Before / after** (rendered from the bundled mockup at 1600px):
+
+| Previous drawer | Multica drawer |
+|---|---|
+| ![Previous drawer design](mockups/screenshots/current-drawer-tall.png) | ![Multica drawer design](mockups/screenshots/final-drawer-tall.png) |
+
 The `customCSS` block in `reflect.yaml` is assembled from two readable
 fragments in [mockups/](mockups/): `reflect-global.css` + `reflect-kanban-final.css`.
 An interactive before/after mockup lives at
 [mockups/kanban-reflect-v2.html](mockups/kanban-reflect-v2.html)
 (variants: Current / Refined / Expressive / Multica, plus `?variant=final`
-to preview the exact shipped CSS).
+to preview the exact shipped CSS). The board and drawer images above are
+renders of that mockup — faithful markup + the shipped theme CSS — not live
+dashboard captures.
 
 ## Font Loading
 

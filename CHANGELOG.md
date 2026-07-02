@@ -71,6 +71,13 @@ readable fragments: `mockups/reflect-global.css` + `mockups/reflect-kanban-final
 - Removed dead duplicate rules (two `.hermes-kanban-card` blocks, two
   `.hermes-kanban-section-head` blocks, two `--progress-full` blocks).
 
+### Docs
+- README now embeds screenshots: a sessions-overview hero, a gallery of the
+  live dashboard captures, and the new Kanban board / drawer renders with a
+  before/after comparison of the drawer redesign.
+- SCREENSHOTS.md checklist updated to reflect what is actually captured, with
+  re-render instructions for the mockup-based Kanban images (`?variant=final`).
+
 ## 2026-06-30 — Card contrast: task id + green progress pill
 
 ### Fixed
